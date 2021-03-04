@@ -265,20 +265,30 @@ android.os.Process.killProcess(android.os.Process.myPid())
 
 2. LinearLayout 线性布局
 
-   多余一个组件时，要使用orientation设置对齐方式
+   多余一个组件时，要使用orientation设置对齐方式（vertical、horizontal）
 
-   
+3. RelativeLayout 相对布局
 
-## 组件
+   可以相对于父布局布局
+
+   也可以相对于控件布局
+
+4. FrameLayout 帧布局
+
+   较少用，它会默认把控件放在左上角，堆在一起
+
+
+
+## 控件
 
 1. TextView
 2. EditView
 3. Button
 4. ImageView
 5. ProgressBar
-6. 
+6. AlertDialog
 
-## 组件注册
+## 控件注册
 
 1. 函数式API注册监听器
 
@@ -317,3 +327,48 @@ android.os.Process.killProcess(android.os.Process.myPid())
    
    }
    ```
+
+## 控件的可见属性
+
+```kotlin
+android:visibility
+```
+
+1. visible
+
+   控件可见
+
+2. invisible
+
+   控件不可见，但仍然占据着原来的位置和大小
+
+3. gone
+
+   控件不可见，而且不在占据任何屏幕控件
+
+## 布局属性
+
+1. android:gravity
+
+   控件内容对齐方式
+
+2. android:layout_gravity
+
+   控件对齐方式
+
+3. android:layout_weight
+
+   layout_weight: 0dp
+
+   百分比平分屏幕
+
+## 控件和布局继承结构
+
+<img src="images/Android基础知识/view.png" alt="img" width="550" />
+
+## 隐藏标题栏
+
+```kotlin
+supportActionBar?.hide()
+```
+
