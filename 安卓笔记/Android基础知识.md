@@ -237,11 +237,11 @@ AndroidManifest.xml中，通过给<activity>标签指定android:launchMode属性
 
 1. standard
 
-   ![img](images\Android基础知识\standard.png)
+   ![img](images/Android基础知识/standard.png)
 
 2. singleTop
 
-   ![img](\images\Android基础知识\singleTop.png)
+   ![img](images/Android基础知识/singleTop.png)
 
 3. singleTask
 
@@ -249,7 +249,7 @@ AndroidManifest.xml中，通过给<activity>标签指定android:launchMode属性
 
 4. singleInstance
 
-   ![img](images\Android基础知识\singleInstance.png)
+   ![img](images/Android基础知识/singleInstance.png)
 
 ##  杀死进程
 
