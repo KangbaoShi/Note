@@ -130,7 +130,7 @@ startActivity(intent)
 
    Android是使用任务(task)来管理Activity的Activity的，一个任务就是一组存放在栈里的Activity的集合，这个栈也被称作返回栈(back stack)。
 
-   ![img](http://www.ituring.com.cn/figures/2021/FirstCodeAndriod/089.png)
+   ![img](../../笔记/安卓笔记/images/Android基础知识/stack.png)
 
 2. Activity状态
 
@@ -204,7 +204,7 @@ startActivity(intent)
 
       Activity总是处于运行状态。
    
-   ![img](http://www.ituring.com.cn/figures/2021/FirstCodeAndriod/090.png)
+   ![img](../../笔记/安卓笔记/images/Android基础知识/life.png)
 
 ## Activity数据保存
 
