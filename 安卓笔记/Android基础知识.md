@@ -154,35 +154,35 @@ startActivity(intent)
 
 3. Activity的生存期
 
-   1. Activity类中定义了**7个回调方法**。
+   Activity类中定义了**7个回调方法**。
 
-      1. onCreate()
+   1. onCreate()
 
-         Acitivity在第一次被创建的时候调用
+      Acitivity在第一次被创建的时候调用
 
-      2. onStart()
+   2. onStart()
 
-         Activity由不可见变为可见的时候调用
+      Activity由不可见变为可见的时候调用
 
-      3. onResume()
+   3. onResume()
 
-         Activity准备好与用户交互的时候调用。此时的Activity一定位于返回栈的栈顶，并处于运行状态。
+      Activity准备好与用户交互的时候调用。此时的Activity一定位于返回栈的栈顶，并处于运行状态。
 
-      4. onPause()
+   4. onPause()
 
-         系统准备去启动或者恢复另一个Activity的时候调用。常在此释放一些消耗CPU的资源，保留一些关键数据，这个方法的执行速度要快，不然会影响到新的栈顶Activity的使用。
+      系统准备去启动或者恢复另一个Activity的时候调用。常在此释放一些消耗CPU的资源，保留一些关键数据，这个方法的执行速度要快，不然会影响到新的栈顶Activity的使用。
 
-      5. onStop()
+   5. onStop()
 
-         Activity完全不可见的时候。它和onPause()方法的主要区别在于，如果启动的新Activity是一个对话框式的Activity，那么onPause()方法会得到执行，而onStop()方法并不会执行。
+      Activity完全不可见的时候。它和onPause()方法的主要区别在于，如果启动的新Activity是一个对话框式的Activity，那么onPause()方法会得到执行，而onStop()方法并不会执行。
 
-      6. onDestroy()
+   6. onDestroy()
 
-         Activity销毁之前调用
+      Activity销毁之前调用
 
-      7. onRestart()
+   7. onRestart()
 
-         Activity重启时调用，停止状态变为运行状态
+      Activity重启时调用，停止状态变为运行状态
 
 4. Activity的生存期
 
