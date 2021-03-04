@@ -237,7 +237,7 @@ AndroidManifest.xml中，通过给<activity>标签指定android:launchMode属性
 
 1. standard
 
-   <img src="images/Android基础知识/standard.png" alt="img" style="zoom:25%;" />
+   <img src="images/Android基础知识/standard.png" width="450" />
 
 2. singleTop
 
