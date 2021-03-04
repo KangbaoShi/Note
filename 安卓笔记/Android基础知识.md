@@ -130,7 +130,7 @@ startActivity(intent)
 
    Android是使用任务(task)来管理Activity的Activity的，一个任务就是一组存放在栈里的Activity的集合，这个栈也被称作返回栈(back stack)。
 
-   <img src="images/Android基础知识/stack.png" alt="img" style="zoom:25%;" />
+   <img src="images/Android基础知识/stack.png" alt="img"  width="550" />
 
 2. Activity状态
 
@@ -204,7 +204,7 @@ startActivity(intent)
 
       Activity总是处于运行状态。
    
-   <img src="images/Android基础知识/life.png" alt="img" style="zoom:25%;" />
+   <img src="images/Android基础知识/life.png" alt="img"  width="550" />
 
 ## Activity数据保存
 
@@ -237,19 +237,19 @@ AndroidManifest.xml中，通过给<activity>标签指定android:launchMode属性
 
 1. standard
 
-   <img src="images/Android基础知识/standard.png" width="450" />
+   <img src="images/Android基础知识/standard.png" width="550" />
 
 2. singleTop
 
-   <img src="images/Android基础知识/singleTop.png" alt="img" style="zoom:25%;" />
+   <img src="images/Android基础知识/singleTop.png" alt="img" width="550" />
 
 3. singleTask
 
-   <img src="images\Android基础知识\singleTask.png" alt="img" style="zoom:25%;" />
+   <img src="images\Android基础知识\singleTask.png" alt="img"  width="550" />
 
 4. singleInstance
 
-   <img src="images/Android基础知识/singleInstance.png" alt="img" style="zoom:25%;" />
+   <img src="images/Android基础知识/singleInstance.png" alt="img"  width="550"/>
 
 ##  杀死进程
 
