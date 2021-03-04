@@ -32,7 +32,7 @@ startActivity(intent)
 
 隐式启动
 
-1. 1. AndroidMainfest.xml
+1. AndroidMainfest.xml
 
    ```xml
    <activity android:name=".ActivityName">
