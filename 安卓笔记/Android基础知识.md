@@ -287,6 +287,7 @@ android.os.Process.killProcess(android.os.Process.myPid())
 4. ImageView
 5. ProgressBar
 6. AlertDialog
+7. ListView
 
 ## 控件注册
 
