@@ -117,3 +117,70 @@ title.xml
 </LinearLayout>
 ```
 
+## viewBinding在Adapter中使用
+
+Fruit.kt
+
+```
+package com.skb.listviewtest
+
+class Fruit(val name: String, val ImageId: Int)
+
+```
+
+FruitAdapter.kt
+
+```kotlin
+package com.skb.listviewtest
+
+import android.app.Activity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.TextView
+import com.skb.listviewtest.databinding.FruitItemBinding
+
+class FruitAdapter(activity : Activity, val resourceId : Int, data: List<Fruit>) : ArrayAdapter<Fruit>(activity, resourceId, data) {
+
+    private lateinit var binding : FruitItemBinding
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+
+        binding = FruitItemBinding.inflate(LayoutInflater.from(context), parent, false)
+        val fruitImage : ImageView = binding.fruitImage
+        val fruitName : TextView = binding.fruitName
+        val fruit = getItem(position)   // 获取当前Fruit实例
+        if (fruit != null) {
+            fruitImage.setImageResource(fruit.ImageId)
+            fruitName.text = fruit.name
+        }
+        return binding.root
+    }
+}
+```
+
+fruit_item.xml
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/fruitImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"/>
+
+    <TextView
+        android:id="@+id/fruitName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"/>
+</LinearLayout>
+```
+
