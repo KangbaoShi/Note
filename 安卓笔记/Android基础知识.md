@@ -288,6 +288,7 @@ android.os.Process.killProcess(android.os.Process.myPid())
 5. ProgressBar
 6. AlertDialog
 7. ListView
+8. RecyclerView
 
 ## 控件注册
 
@@ -371,5 +372,59 @@ android:visibility
 
 ```kotlin
 supportActionBar?.hide()
+```
+
+## ListView性能优化布局缓存
+
+convertView中存在布局的缓存，直接对convertView进行绑定。
+
+```
+class FruitAdapter(activity : Activity, val resourceId : Int, data: List<Fruit>) : ArrayAdapter<Fruit>(activity, resourceId, data) {
+
+    private lateinit var binding : FruitItemBinding
+    
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        binding = if (convertView == null) {
+            FruitItemBinding.inflate(LayoutInflater.from(context), parent, false)
+        } else {
+            FruitItemBinding.bind(convertView)
+        }
+		return binding.root
+	}
+}
+```
+
+## ListView性能优化实例缓存
+
+利用内部类ViewHolder生成item的实例进行缓存
+
+```kotlin
+class FruitAdapter(activity : Activity, resourceId: Int, data: List<Fruit>) : ArrayAdapter<Fruit>(activity, resourceId, data) {
+
+    private lateinit var binding : FruitItemBinding
+
+    inner class ViewHolder(val fruitImage : ImageView, val fruitName : TextView)
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+
+        val viewHolder : ViewHolder
+        if (convertView == null) {
+            binding = FruitItemBinding.inflate(LayoutInflater.from(context), parent, false)
+            val fruitImage : ImageView = binding.fruitImage
+            val fruitName : TextView = binding.fruitName
+            viewHolder = ViewHolder(fruitImage, fruitName)
+            binding.root.tag = viewHolder
+        } else {
+            binding = FruitItemBinding.bind(convertView)
+            viewHolder = binding.root.tag as ViewHolder
+        }
+
+        val fruit = getItem(position)   // 获取当前Fruit实例
+        if (fruit != null) {
+            viewHolder.fruitImage.setImageResource(fruit.ImageId)
+            viewHolder.fruitName.text = fruit.name
+        }
+        return binding.root
+    }
+}
 ```
 
