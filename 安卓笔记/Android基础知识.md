@@ -1,4 +1,4 @@
-# Android基础知识
+# `Android`基础知识
 
 ## 四大组件
 
@@ -126,63 +126,63 @@ startActivity(intent)
 
 ## Activity的生命周期
 
-1. Activity栈
+### Activity栈
 
-   Android是使用任务(task)来管理Activity的Activity的，一个任务就是一组存放在栈里的Activity的集合，这个栈也被称作返回栈(back stack)。
+Android是使用任务(task)来管理Activity的Activity的，一个任务就是一组存放在栈里的Activity的集合，这个栈也被称作返回栈(back stack)。
 
-   <img src="images/Android基础知识/stack.png" alt="img"  width="550" />
+<img src="images/Android基础知识/stack.png" alt="img"  width="550" />
 
-2. Activity状态
+### Activity状态
 
-   每个Activity在其神明周期中最多可能会有4种状态。
+每个Activity在其神明周期中最多可能会有4种状态。
 
-   1. 运行状态
+1. **运行状态**
 
-      Activity处于栈顶时，系统最不愿回收的Activity。
+   Activity处于栈顶时，系统最不愿回收的Activity。
 
-   2. 暂停状态
+2. **暂停状态**
 
-      Activity不再处于栈顶位置，对话框形式的Activity在原Activity上。系统也不愿意回收这种Activity。
+   Activity不再处于栈顶位置，对话框形式的Activity在原Activity上。系统也不愿意回收这种Activity。
 
-   3. 停止状态
+3. **停止状态**
 
-      当一个Activity不再处于栈顶位置，并且完全不可见的时候，处于停止状态。系统会为其保存相应的状态和成员变量，当前其它地方需要内存时，此Activity可能被系统回收。
+   当一个Activity不再处于栈顶位置，并且完全不可见的时候，处于停止状态。系统会为其保存相应的状态和成员变量，当前其它地方需要内存时，此Activity可能被系统回收。
 
-   4. 销毁状态
+4. **销毁状态**
 
-      一个Activity从返回栈种移除后就变成了销毁状态。系统最倾向于回收这种状态的Activity，以保证手机的内存充足。
+   一个Activity从返回栈种移除后就变成了销毁状态。系统最倾向于回收这种状态的Activity，以保证手机的内存充足。
 
-3. Activity的生存期
+### Activity的生存期
 
-   Activity类中定义了**7个回调方法**。
+Activity类中定义了**7个回调方法**。
 
-   1. onCreate()
+1. onCreate()
 
-      Acitivity在第一次被创建的时候调用
+   Acitivity在第一次被创建的时候调用
 
-   2. onStart()
+2. onStart()
 
-      Activity由不可见变为可见的时候调用
+   Activity由不可见变为可见的时候调用
 
-   3. onResume()
+3. onResume()
 
-      Activity准备好与用户交互的时候调用。此时的Activity一定位于返回栈的栈顶，并处于运行状态。
+   Activity准备好与用户交互的时候调用。此时的Activity一定位于返回栈的栈顶，并处于运行状态。
 
-   4. onPause()
+4. onPause()
 
-      系统准备去启动或者恢复另一个Activity的时候调用。常在此释放一些消耗CPU的资源，保留一些关键数据，这个方法的执行速度要快，不然会影响到新的栈顶Activity的使用。
+   系统准备去启动或者恢复另一个Activity的时候调用。常在此释放一些消耗CPU的资源，保留一些关键数据，这个方法的执行速度要快，不然会影响到新的栈顶Activity的使用。
 
-   5. onStop()
+5. onStop()
 
-      Activity完全不可见的时候。它和onPause()方法的主要区别在于，如果启动的新Activity是一个对话框式的Activity，那么onPause()方法会得到执行，而onStop()方法并不会执行。
+   Activity完全不可见的时候。它和onPause()方法的主要区别在于，如果启动的新Activity是一个对话框式的Activity，那么onPause()方法会得到执行，而onStop()方法并不会执行。
 
-   6. onDestroy()
+6. onDestroy()
 
-      Activity销毁之前调用
+   Activity销毁之前调用
 
-   7. onRestart()
+7. onRestart()
 
-      Activity重启时调用，停止状态变为运行状态
+   Activity重启时调用，停止状态变为运行状态
 
 4. Activity的生存期
 
@@ -428,3 +428,69 @@ class FruitAdapter(activity : Activity, resourceId: Int, data: List<Fruit>) : Ar
 }
 ```
 
+## Fragment
+
+Fragment是一种可以嵌入在Activity当中的UI片段，它能让程序更加合理和充分地利用大屏幕的空间
+
+### 动态添加Fragment
+
+1. 创建待添加Fragment的实例。
+2. 获取FragmentManager，在Activity中可以直接`getSupportFragmentManager()`方法获取。
+3. 开启一个事务，通过调用`beginTransaction()`方法开启。
+4. 向容器内添加或替换Fragment，一般使用`replace()`方法实现，需要传入容器的id和待添加的Fragment实例。
+5. 提交事务，调用`commit()`方法来完成。
+
+### Fragment中实现返回栈
+
+`addToBackStack()`
+
+## Fragment与Activity之间的交互
+
+### Activity获取Fragment实例
+
+```
+findFragmentById()
+```
+
+### Fragment获取Activity实例
+
+```
+getActivity()
+```
+
+## Fragment的生命周期
+
+### Fragment的状态
+
+1. **运行状态**
+2. **暂停状态**
+3. **停止状态**
+4. **停止状态**
+
+### Fragment的回调
+
+1. **onAttach()**
+2. **onCreateView()**
+3. **onActivityCreated()**
+4. **onDestroyView()**
+5. **onDetach()**
+
+### Fragment完整的生命周期
+
+<img src="http://www.ituring.com.cn/figures/2021/FirstCodeAndriod/167.png" alt="img" width="550" />
+
+## Android常见限定符
+
+| 屏幕特征 | 限定符   | 描述                                            |
+| :------- | :------- | :---------------------------------------------- |
+| 大小     | `small`  | 提供给小屏幕设备的资源                          |
+|          | `normal` | 提供给中等屏幕设备的资源                        |
+|          | `large`  | 提供给大屏幕设备的资源                          |
+|          | `xlarge` | 提供给超大屏幕设备的资源                        |
+| 分辨率   | `ldpi`   | 提供给低分辨率设备的资源（120 dpi以下）         |
+|          | `mdpi`   | 提供给中等分辨率设备的资源（120 dpi~160 dpi）   |
+|          | `hdpi`   | 提供给高分辨率设备的资源（160 dpi~240 dpi）     |
+|          | `xhdpi`  | 提供给超高分辨率设备的资源（240 dpi~320 dpi）   |
+|          | `xxhdpi` | 提供给超超高分辨率设备的资源（320 dpi~480 dpi） |
+| 方向     | `land`   | 提供给横屏设备的资源                            |
+|          | `port`   | 提供给竖屏设备的资源                            |

@@ -161,4 +161,81 @@
 
    Kotlin编译器会将所有的顶层方法全部编译成静态方法。
 
-   
+
+## 对变量延迟初始化
+
+1. class?
+
+   ```kotlin
+   var adapter : MsgAdapter? = null
+   ```
+
+2. lateinit
+
+   ```kotlin
+   lateinit var adapter : MsgAdapter
+   ```
+
+   判空
+
+   ```kotlin
+   if (!::adapter.isInitialized) {
+   	adapter = MsgAdapter(msgList)
+   }
+   ```
+
+## 密封类
+
+1. 密封类是可继承的
+2. 密封类及其所有子类只能定义在同一个文件顶层位置，不能嵌套在其它类中，这是密封类底层的实现机制所限制的
+
+```kotlin
+sealed class Result
+class Success(val msg:String) : Result()
+class Failure(val error: Exception) : Result()
+```
+
+```kotlin
+fun getResultMsg(result: Result) = when (result) {
+    is Success -> result.msg
+    is Failure -> "Error is ${result.error.message}"
+}
+```
+
+### 密封类具体作用
+
+这是一个interface接口类
+
+```kotlin
+interface Result
+class Success(val msg: String) : Result
+class Failure(val error: Exception) : Result
+```
+
+getResultMsg()用于获取执行结果信息
+
+```kotlin
+fun getResultMsg(result: Result) = when (result) {
+    is Success -> result.msg
+    is Failure -> result.error.message
+    else -> throw IllegalArgumentException()
+}
+```
+
+kotlin默认when语法
+
+```
+fun describe(obj: Any): String =
+    when (obj) {
+        1          -> "One"
+        "Hello"    -> "Greeting"
+        is Long    -> "Long"
+        !is String -> "Not a string"
+        else       -> "Unknown"
+    }
+```
+
+所以使用interface必须写else
+
+使用密封类便可以省略else条件分支，因为Result的执行结果只可能是`Success`或者`Failure`
+

@@ -64,6 +64,32 @@ class MainActivity : AppCompatActivity() {
 
 kotlin要求所有的变量在声明时需要初始化。而这里我们显然无法对其进行初始化，所以这里使用了lateinit关键字对变量进行延迟初始化。
 
+## Fragment
+
+在Fragment使用viewBinding
+
+```kotlin
+class MainFragment : Fragment() {
+
+    private var _binding: FragmentMainBinding? = null
+
+    private val binding get() = _binding!!
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View 
+    {
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+}
+
+```
+
 ## viewBinding在自定义布局中使用
 
 TitleLayout.kt
@@ -71,13 +97,11 @@ TitleLayout.kt
 ```kotlin
 class TitleLayout(context: Context?, attrs: AttributeSet?) : LinearLayout(context, attrs) {
 
+	private var binding : TitleBinding = TitleBinding.inflate(LayoutInflater.from(context), this, true)
 
-    private var binding : TitleBinding =
-        TitleBinding.inflate(LayoutInflater.from(context), this, true)
-
-    init {
-        binding.titleBack.setOnClickListener {
-            Toast.makeText(context,"TitleBinding", Toast.LENGTH_SHORT).show()
+	init {
+		binding.titleBack.setOnClickListener {
+			Toast.makeText(context,"TitleBinding", Toast.LENGTH_SHORT).show()
         }
     }
 }
