@@ -239,3 +239,98 @@ fun describe(obj: Any): String =
 
 使用密封类便可以省略else条件分支，因为Result的执行结果只可能是`Success`或者`Failure`
 
+## 扩展函数
+
+扩展函数表示即使在不修改某个类的源码的情况下，仍然可以打开这个类，向该类添加新的函数。
+
+### 语法结构
+
+```kotlin
+fun ClassName.methodName(param1: Int, param2: Int): Int {
+    return 0
+}
+```
+
+示例
+
+```kotlin
+fun String.lettersCount(): Int {
+    var count = 0
+    for (char in this) {
+        if (char.isLetter()) {
+            count++
+        }
+    }
+    return count
+}
+```
+
+使用方法
+
+```kotlin
+val count = "ABC123xyz!@#".lettersCount()
+```
+
+## 运算符重载
+
+`+`重载
+
+```kotlin
+class Obj {
+
+    operator fun plus(obj: Obj): Obj {
+        // 处理相加的逻辑
+    }
+
+}
+```
+
+`+`多重重载
+
+```kotlin
+class Money(val value: Int) {
+
+    operator fun plus(money: Money): Money {
+        val sum = value + money.value
+        return Money(sum)
+    }
+
+    operator fun plus(newValue: Int): Money {
+        val sum = value + newValue
+        return Money(sum)
+    }
+
+}
+```
+
+### 随机字符长度
+
+```kotlin
+operator fun String.times(n: Int) = repeat(n)
+fun getRandomLengthString(str: String) = str * (1..20).random()
+```
+
+### 语法糖表达式和实际调用函数对照表
+
+| 语法糖表达式 | 实际调用函数         |
+| :----------- | :------------------- |
+| `a + b`      | `a.plus(b)`          |
+| `a - b`      | `a.minus(b)`         |
+| `a * b`      | `a.times(b)`         |
+| `a / b`      | `a.div(b)`           |
+| `a % b`      | `a.rem(b)`           |
+| `a++`        | `a.inc()`            |
+| `a--`        | `a.dec()`            |
+| `+a`         | `a.unaryPlus()`      |
+| `-a`         | `a.unaryMinus()`     |
+| `!a`         | `a.not()`            |
+| `a == b`     | `a.equals(b)`        |
+| `a > b`      | `a.compareTo(b) > 0` |
+| `a < b`      | `a.compareTo(b) < 0` |
+| `a >= b`     | `a.compareTo(b) >=0` |
+| `a <= b`     | `a.compareTo(b)<=0`  |
+| `a..b`       | `a.rangeTo(b)`       |
+| `a[b]`       | `a.get(b)`           |
+| `a[b] = c`   | `a.set(b, c)`        |
+| `a in b`     | `b.contains(a)`      |
+
