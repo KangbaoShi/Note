@@ -495,3 +495,138 @@ getActivity()
 | 方向     | `land`   | 提供给横屏设备的资源                            |
 |          | `port`   | 提供给竖屏设备的资源                            |
 
+## 广播机制
+
+**BroadcastReceiver**
+
+### 标准广播(normal broadcasts)
+
+```kotlin
+sendBroadcast(Intent intent) {
+	mBase.sendBroadcast(intent);
+}
+sendBroadcast(Intent intent, String receiverPermission) {
+	mBase.sendBroadcast(intent, receiverPermission);
+}
+```
+
+一种完全异步执行的广播，在广播发出之后，所有的BroadcastReceiver几乎同一时刻收到广播消息。这种广播无法被截断。
+
+<img src="../Linux笔记/Images/normal_broadcasts.png" alt="img" width="550" />
+
+### 有序广播(orderd broadcasts)
+
+```
+sendOrderedBroadcast(Intent intent, String receiverPermission) {
+	mBase.sendOrderedBroadcast(intent, receiverPermission);
+}
+```
+
+一种同步执行的广播，在广播发出之后，同一时刻只会有一个BroadcastsReceiver收到广播消息，当这个BroadcastReceiver中的逻辑执行完毕后，广播才会继续传递。前面的BroadcastsReceiver可以截断正在传播的消息。
+
+<img src="../Linux笔记/Images/orderdbroadcasts.png" alt="img" width="550" />
+
+### 阻止有序广播传播
+
+```kotlin
+abortBroadcast()
+```
+
+
+
+### 注册方法
+
+1. **动态注册**
+
+   在代码中注册
+
+   ```kotlin
+   class MainActivity : AppCompatActivity() {
+   
+       private lateinit var timeChangeReceiver:TimeChangeReceiver
+       private lateinit var binding : ActivityMainBinding
+   
+       override fun onCreate(savedInstanceState: Bundle?) {
+           super.onCreate(savedInstanceState)
+           binding = ActivityMainBinding.inflate(layoutInflater)
+           setContentView(binding.root)
+           val intentFilter = IntentFilter()
+           intentFilter.addAction("android.intent.action.TIME_TICK")
+           timeChangeReceiver = TimeChangeReceiver()
+           registerReceiver(timeChangeReceiver, intentFilter)
+       }
+   
+       override fun onDestroy() {
+           super.onDestroy()
+           unregisterReceiver(timeChangeReceiver)
+       }
+   
+       inner class TimeChangeReceiver : BroadcastReceiver() {
+           override fun onReceive(context: Context?, intent: Intent?) {
+               Toast.makeText(context, "Time has changed", Toast.LENGTH_SHORT).show()
+           }
+   
+       }
+   }
+   ```
+
+   **系统广播列表**
+
+   ```kotlin
+   <Android SDK>/platforms/<任意android api版本>/data/broadcast_actions.txt
+   ```
+
+   **缺陷**
+
+   必须在程序启动后才能接收广播
+
+2. **静态注册**
+
+   [可静态注册的广播]('https://developer.android.google.cn/guide/components/broadcast-exceptions.html')
+
+   在AndroidManifest.xml中注册
+
+   BootCompleteReceiver.kt
+
+   ```kotlin
+   class BootCompleteReceiver : BroadcastReceiver() {
+   
+       override fun onReceive(context: Context, intent: Intent) {
+           // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
+           Toast.makeText(context, "Boot Complete", Toast.LENGTH_SHORT).show()
+       }
+   }
+   ```
+
+   AndroidManifest.xml
+
+   ```xml
+   <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+           package="com.example.broadcasttest">
+   
+       <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+   
+       <application
+           android:allowBackup="true"
+           android:icon="@mipmap/ic_launcher"
+           android:label="@string/app_name"
+           android:roundIcon="@mipmap/ic_launcher_round"
+           android:supportsRtl="true"
+           android:theme="@style/AppTheme">
+           ...
+           <receiver
+               android:name=".BootCompleteReceiver"
+               android:enabled="true"
+               android:exported="true">
+               <intent-filter>
+                   <action android:name="android.intent.action.BOOT_COMPLETED" />
+               </intent-filter>
+           </receiver>
+       </application>
+   
+   </manifest>
+   ```
+
+   在Android8.0系统之后，静态注册的BroadcastReceiver是无法接收隐式广播的，而默认情况下我们发出的自定义广播都是隐式广播。所以要使用setPackage()方法。
+
+   
