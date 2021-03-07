@@ -629,4 +629,74 @@ abortBroadcast()
 
    在Android8.0系统之后，静态注册的BroadcastReceiver是无法接收隐式广播的，而默认情况下我们发出的自定义广播都是隐式广播。所以要使用setPackage()方法。
 
-   
+# 数据存储
+
+**持久化技术**
+
+将那些内存中的瞬时数据保存到存储设备中，保证即使在手机或计算机关机的情况下，这些数据仍然不会丢失。
+
+持久化技术提供了一种机制，可以让数据在瞬时状态和持久状态之间进行转换。
+
+## 三种持久化技术
+
+1. 文件存储
+2. SharedPreferences存储
+3. 数据库存储
+
+### 文件存储
+
+默认存储位置
+
+/data/data/<package name>/files/
+
+文件操作模式
+
+1. `MODE_PRIVATE`
+
+   指定相同文件名的时候，所写入的内容将会覆盖原文件中的内容
+
+2. `MODE_APPEND`
+
+   如果该文件已存在，就往文件里面追加内容，不存在就创建新文件
+
+#### **存储**
+
+```kotlin
+fun save(inputText: String) {
+    try {
+        val output = openFileOutput("data", Context.MODE_PRIVATE)
+        val writer = BufferedWriter(OutputStreamWriter(output))
+        writer.use {
+            it.write(inputText)
+        }
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
+}
+```
+
+#### **读取**
+
+```kotlin
+fun load(): String {
+	val content = StringBuilder()
+	try {
+		val input = openFileInput("data")
+		val reader = BufferedReader(InputStreamReader(input))
+		reader.use {
+			reader.forEachLine {
+				content.append(it)
+			}
+		}
+	} catch (e: IOException) {
+		e.printStackTrace()
+	}
+	return content.toString()
+}
+```
+
+### SharedPreferences
+
+#### Context类中的getSharedPreferences()方法
+
+#### Activity类中的getPreferences()方法
