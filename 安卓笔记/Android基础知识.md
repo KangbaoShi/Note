@@ -697,6 +697,58 @@ fun load(): String {
 
 ### SharedPreferences
 
-#### Context类中的getSharedPreferences()方法
+**使用该技术时需要先获取SharedPreferences对象**
 
-#### Activity类中的getPreferences()方法
+SharedPreferences存放路径`/data/data/<package name>/shared_prefs/`
+
+只存在`MODE_PRIVATE`操作模式
+
+#### 存储
+
+SharedPreferences() 、getSharedPreferences()
+
+1. 创建SharedPreferences对象的edit()方法获取实例
+2. 向SharedPreferences对象中添加数据
+3. 调用apply()提交数据，完成存储
+
+##### Context类中的getSharedPreferences()方法
+
+```kotlin
+public abstract SharedPreferences getSharedPreferences(String name, @PreferencesMode int mode)
+```
+
+```kotlin
+val editor = getSharedPreferences("data", Context.MODE_PRIVATE).edit()
+editor.putString("name", "Tome")
+editor.putInt("age", 28)
+editor.putBoolean("married", false)
+editor.apply()
+```
+
+##### Activity类中的getPreferences()方法
+
+```kotlin
+public SharedPreferences getPreferences(@Context.PreferencesMode int mode) {
+	return getSharedPreferences(getLocalClassName(), mode);
+}
+```
+
+文件将以该类名作为文件名
+
+```kotlin
+val editor = getPreferences(MODE_PRIVATE).edit()
+editor.putString("name", "Tome")
+editor.putInt("age", 28)
+editor.putBoolean("married", false)
+editor.apply()
+```
+
+#### 读取
+
+```kotlin
+val prefs = getSharedPreferences("data", Context.MODE_PRIVATE)
+val name = prefs.getString("name", "")
+val age = prefs.getInt("age", 0)
+val married = prefs.getBoolean("married", false)
+```
+
