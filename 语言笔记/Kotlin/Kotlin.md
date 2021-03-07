@@ -334,3 +334,198 @@ fun getRandomLengthString(str: String) = str * (1..20).random()
 | `a[b] = c`   | `a.set(b, c)`        |
 | `a in b`     | `b.contains(a)`      |
 
+## 定义高阶函数
+
+**基本规则**
+
+```kotlin
+(String, Int) -> Unit
+```
+
+```kotlin
+fun example(func: (String, Int) -> Unit) {
+    func("hello", 123)
+}
+```
+
+### 高阶函数例子
+
+```kotlin
+fun num1AndNum2(num1: Int, num2: Int, operation: (Int, Int) -> Int): Int {
+    return operation(num1, num2)
+}
+
+fun plus(num1: Int, num2: Int): Int {
+    return num1 + num2
+}
+
+fun minus(num1: Int, num2: Int): Int {
+    return num1 - num2
+}
+
+
+fun main() {
+    val num1 = 100
+    val num2 = 80
+    val result1 = num1AndNum2(num1, num2, ::plus)
+    val result2 = num1AndNum2(num1, num2, ::minus)
+    println("result1 is $result1")
+    println("result1 is $result2")
+}
+```
+
+### Lambda表达式
+
+```kotlin
+fun num1AndNum2(num1: Int, num2: Int, operation: (Int, Int) -> Int): Int {
+    return operation(num1, num2)
+}
+
+fun main() {
+    val num1 = 100
+    val num2 = 80
+    val result1 = num1AndNum2(num1, num2) { n1, n2
+        -> n1 + n2
+    }
+    val result2 = num1AndNum2(num1, num2) { n1, n2
+        -> n1 - n2
+    }
+    println("result1 is $result1")
+    println("result1 is $result2")
+}
+```
+
+### 实现applay()函数
+
+```kotlin
+fun StringBuilder.build (block : StringBuilder.() -> Unit) : StringBuilder {
+    block()
+    return this
+}
+
+fun main() {
+    val list = listOf("Apple", "Banana")
+    val result = StringBuilder().build {
+        append("Start eating fruits.\n")
+        for (fruit in list) {
+            append(fruit).append("\n")
+        }
+        append("Ate all fruits.")
+    }
+
+    println(result.toString())
+}
+```
+
+## 内联函数的作用
+
+**inline**
+
+当不使用inline时，Kotlin会将高阶函数变成Funcation接口的匿名类实现，这样会带来额外的内存和性能开销。
+
+**inline例子**
+
+```kotlin
+inline fun num1AndNum2(num1: Int, num2: Int, operation: (Int, Int) -> Int): Int {
+    val result = operation(num1, num2)
+    return result
+}
+```
+
+**noinline**
+
+使用了noinline关键字的地方不会被内联
+
+```kotlin
+inline fun inlineTest(block1: () -> Unit, noinline block2: () -> Unit) {
+}
+```
+
+1. 内联的函数类型参数在编译的时候会被进行代码替换，因此它没有真正的参数属性。非内联的函数类型参数可以自由地传递给其他任何函数，因为它就是一个真实的参数，而内联的函数类型参数只允许传递给另外一个内联函数，这也是它最大的局限性。
+2. 内联函数和非内联函数还有一个重要的区别，那就是内联函数所引用的Lambda表达式中是可以使用`return`关键字来进行函数返回的，而非内联函数只能进行局部返回。
+
+**noinline局部函数返回**
+
+```kotlin
+fun printString(str: String, block: (String) -> Unit) {
+    println("printString begin")
+    block(str)
+    println("printString end")
+}
+
+fun main() {
+    println("main start")
+    val str = ""
+    printString(str) { s ->
+        println("lambda start")
+        if (s.isEmpty()) return@printString
+        println(s)
+        println("lambda end")
+    }
+    println("main end")
+}
+```
+
+```kotlin
+main start
+printString begin
+lambda start
+printString end
+main end
+```
+
+Lambda表达式中是不允许直接使用`return`关键字的，这里使用了`return@printString`的写法，表示进行局部返回，并且不再执行Lambda表达式的剩余部分代码。
+
+**inline非局部返回**
+
+```xml
+inline fun printString(str: String, block: (String) -> Unit) {
+    println("printString begin")
+    block(str)
+    println("printString end")
+}
+
+fun main() {
+    println("main start")
+    val str = ""
+    printString(str) { s ->
+        println("lambda start")
+        if (s.isEmpty()) return
+        println(s)
+        println("lambda end")
+    }
+    println("main end")
+}
+```
+
+```
+main start
+printString begin
+lambda start
+
+```
+
+**crossinline**
+
+**报错**
+
+```
+inline fun runRunnable(block: () -> Unit) {
+    val runnable = Runnable {
+        block()
+    }
+    runnable.run()
+}
+```
+
+**正常**
+
+```kotlin
+inline fun runRunnable(crossinline block: () -> Unit) {
+    val runnable = Runnable {
+        block()
+    }
+    runnable.run()
+}
+```
+
