@@ -752,3 +752,93 @@ val age = prefs.getInt("age", 0)
 val married = prefs.getBoolean("married", false)
 ```
 
+### SQLite数据库存储
+
+支持标准SQL语法，遵循数据库的ACID事务
+
+SQLiteOpenHelper
+
+```kotlin
+抽象方法
+onCreate() 创建数据库
+onUpgrade() 升级数据库
+实例方法
+getReadableDatabase()
+getWriteableDatabase()
+都会返回一个可以对数据库读写的对象
+
+磁盘空间已满
+getReadableDatabase()返回的对象将以只读的方式打开数据库
+getWriteableDatabase()报错
+```
+
+**数据库文件路径存放路径**
+
+/data/data/<package name>/databases/
+
+**数据结构**
+
+| 字段    | 说明     |
+| ------- | -------- |
+| null    | null     |
+| integer | 整型     |
+| real    | 浮点型   |
+| text    | 文本类型 |
+| blob    | 二进制   |
+
+**属性**
+
+| 属性          | 说明 |
+| ------------- | ---- |
+| autoincrement | 自增 |
+| primary key   | 主键 |
+| 待添加        |      |
+
+#### SQLite数据操作
+
+CRUD
+
+1. create   添加
+2. retrieve 查询
+3. update  更新
+4. delete    删除
+
+insert()、query()、update()、delete()
+
+**query()**
+
+| query参数     | 对于SQL部分               | 描述                            |
+| ------------- | ------------------------- | ------------------------------- |
+| table         | from table_name           | 指定查询的表名                  |
+| columns       | select column1, column2   | 指定查询的列名                  |
+| selection     | where column = value      | 指定`where`的约束条件           |
+| selectionArgs | -                         | 为`where`中的占位符提供具体的值 |
+| groupBy       | group by column           | 指定需要`group by`的列          |
+| having        | having column = value     | 对`group by`后的结果进一步约束  |
+| orderBy       | order by column1, column2 | 指定查询结果的排序方式          |
+
+#### SQLite事务支持
+
+```kotlin
+db.beginTransaction() // 开启事务
+try {
+	db.delete("Book", null, null)
+	if (true) {
+		// 手动抛出一个异常
+		throw NullPointerException()
+	}
+	val values = ContentValues().apply {
+		put("name", "Game of Thrones")
+		put("author", "George Martin")
+		put("pages", 720)
+		put("price", 20.85)
+	}
+	db.insert("Book", null, values)
+	db.setTransactionSuccessful() // 事务已经执行成功
+}catch (e:Exception) {
+	e.printStackTrace()
+}finally {
+	db.endTransaction() // 结束事务
+}
+```
+
