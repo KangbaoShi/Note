@@ -105,7 +105,7 @@ docker stop $(docker ps -aq)
 ## Docker 删除所有镜像
 
 ```shell
-docker rmi -f $(docker images -aq)
+docker rm -f $(docker ps -a -q)
 ```
 
 ## Docker-compose
